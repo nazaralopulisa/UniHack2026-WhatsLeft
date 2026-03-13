@@ -1,2 +1,2 @@
 # UniHack2026-WhatsLeft
-Mobile app for students to track kitchen ingredients, get recipe recommendations by difficulty, save favorites to a cookbook, and generate grocery lists with nearby store locations. Built for UniHack2026.
+WhatsLeft helps university students (and anyone with a busy schedule!) solve the daily "what's for dinner?" struggle. Simply input the ingredients you have on hand, and our app suggests recipes from easy to hard that you can actually make. Save your favorites to a personal cookbook, generate smart grocery lists for ingredients you need, and find the nearest stores to grab them. No more buying a whole new set of ingredients for every recipe!
