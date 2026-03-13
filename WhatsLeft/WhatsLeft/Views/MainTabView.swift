@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab = 0
+    @StateObject var kitchenVM = KitchenViewModel()
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -23,7 +24,7 @@ struct MainTabView: View {
             
             // Ingredients Tab
             NavigationStack {
-                IngredientsView()
+                IngredientsView(viewModel: kitchenVM)
             }
             .tabItem {
                 Label("Pantry", systemImage: "basket")
