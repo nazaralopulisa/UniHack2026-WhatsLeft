@@ -97,8 +97,8 @@ extension Ingredient {
             Ingredient(name: "Salt", quantity: 500, unit: "grams", inStock: true, category: .spices),
             Ingredient(name: "Chicken Breast", quantity: 2, unit: "pieces", inStock: false, category: .meat),
             Ingredient(name: "Rice", quantity: 3, unit: "kg", inStock: true, category: .grains),
-            Ingredient(name: "Tomatoes", quantity: 6, unit: "pieces", inStock: true, category: .vegetables),
-            Ingredient(name: "Onions", quantity: 3, unit: "pieces", inStock: true, category: .vegetables),
+            Ingredient(name: "Tomato", quantity: 6, unit: "pieces", inStock: true, category: .vegetables),
+            Ingredient(name: "Onion", quantity: 3, unit: "pieces", inStock: true, category: .vegetables),
             Ingredient(name: "Garlic", quantity: 1, unit: "pieces", inStock: true, category: .vegetables),
             Ingredient(name: "Butter", quantity: 250, unit: "grams", inStock: true, category: .dairy)
         ]

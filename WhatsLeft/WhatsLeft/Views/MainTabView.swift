@@ -124,6 +124,7 @@ struct MainTabView: View {
                 }
             )
         }
+        .environmentObject(kitchenVM)
     }
 }
 

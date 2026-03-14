@@ -105,14 +105,16 @@ class KitchenViewModel: ObservableObject {
     
     // MARK: - Recipe Methods
     func getRecipesYouCanMake() -> [Recipe] {
-        // This will be expanded later with actual recipe matching
         return SampleData.recipes.filter { recipe in
             let missingIngredients = recipe.ingredients.filter { recipeIngredient in
+                // Check if any available ingredient contains the recipe ingredient (case insensitive)
                 !availableIngredients.contains { available in
-                    available.lowercased() == recipeIngredient.name.lowercased()
+                    available.lowercased().contains(recipeIngredient.name.lowercased()) ||
+                    recipeIngredient.name.lowercased().contains(available.lowercased())
                 }
             }
-            return missingIngredients.count <= 1 // Allow 1 missing ingredient
+            // Allow up to 2 missing ingredients for more suggestions
+            return missingIngredients.count <= 2
         }
     }
     
