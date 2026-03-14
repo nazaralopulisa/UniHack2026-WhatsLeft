@@ -143,7 +143,7 @@ struct FoodCameraView: View {
                     VStack(spacing: 30) {
                         Image(systemName: "camera.viewfinder")
                             .font(.system(size: 80))
-                            .foregroundColor(.appYellow)
+                            .foregroundColor(.darkYellow)
                         
                         Text("Take a photo of your ingredient")
                             .font(.headline)
@@ -159,13 +159,13 @@ struct FoodCameraView: View {
                                 VStack {
                                     Image(systemName: "camera")
                                         .font(.largeTitle)
-                                        .foregroundColor(.appYellow)
+                                        .foregroundColor(.darkYellow)
 
                                     Text("Take Photo")
-                                        .foregroundColor(.appYellow)
+                                        .foregroundColor(.darkYellow)
                                 }
                                 .frame(width: 120, height: 120)
-                                .background(Color.cream.opacity(0.2))
+                                .background(Color.appYellow.opacity(0.2))
                                 .cornerRadius(20)
                             }
                             
@@ -175,12 +175,12 @@ struct FoodCameraView: View {
                                 VStack {
                                     Image(systemName: "photo")
                                         .font(.largeTitle)
-                                        .foregroundColor(.appYellow)
+                                        .foregroundColor(.darkYellow)
                                     Text("Choose Photo")
-                                        .foregroundColor(.appYellow)
+                                        .foregroundColor(.darkYellow)
                                 }
                                 .frame(width: 120, height: 120)
-                                .background(Color.cream.opacity(0.2))
+                                .background(Color.appYellow.opacity(0.2))
                                 .cornerRadius(20)
                             }
                         }
