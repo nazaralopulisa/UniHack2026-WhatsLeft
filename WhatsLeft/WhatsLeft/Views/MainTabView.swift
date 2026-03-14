@@ -17,6 +17,7 @@ struct MainTabView: View {
     @State private var showingQuantitySheet = false
     @State private var quantity = ""
     @State private var selectedUnit = "pieces"
+    @State private var selectedCategory: IngredientCategory = .other
     
     let units = ["pieces", "grams", "kg", "cups", "tbsp", "tsp", "ml", "liters"]
     
@@ -88,7 +89,16 @@ struct MainTabView: View {
         .sheet(isPresented: $showingScanner) {
             FoodCameraView(
                 scannedIngredient: $scannedIngredient,
-                isScanning: $showingScanner
+                isScanning: $showingScanner,
+                onManualEntry: { ingredientName in
+                    // If ingredientName is provided, pre-fill it
+                    if !ingredientName.isEmpty {
+                        scannedIngredient = ingredientName
+                    }
+                    
+                    // Show quantity sheet for manual entry
+                    showingQuantitySheet = true
+                }
             )
         }
         // Quantity Sheet (after scanning)
@@ -102,6 +112,7 @@ struct MainTabView: View {
                 ingredientName: $scannedIngredient,
                 quantity: $quantity,
                 unit: $selectedUnit,
+                category: $selectedCategory,
                 onSave: {
                     if let quantityValue = Double(quantity), !scannedIngredient.isEmpty {
                         let newIngredient = Ingredient(
@@ -109,7 +120,7 @@ struct MainTabView: View {
                             quantity: quantityValue,
                             unit: selectedUnit,
                             inStock: true,
-                            category: .other
+                            category: selectedCategory
                         )
                         kitchenVM.addIngredient(newIngredient)
                         

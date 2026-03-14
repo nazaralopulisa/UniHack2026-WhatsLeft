@@ -14,6 +14,9 @@ struct FoodCameraView: View {
     @Binding var isScanning: Bool
     @Environment(\.dismiss) var dismiss
     
+    // Add these to handle manual entry
+    var onManualEntry: ((String) -> Void)? // Callback for manual entry
+    
     @State private var isTakingPhoto = false
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
@@ -23,6 +26,7 @@ struct FoodCameraView: View {
     @State private var showResult = false
     @State private var errorMessage = ""
     @State private var showError = false
+    @State private var showingManualEntry = false // New state for manual entry
     
     // Confidence threshold - only show results above this
     private let confidenceThreshold: Float = 0.6
@@ -114,19 +118,23 @@ struct FoodCameraView: View {
                             }
                             .buttonStyle(.borderedProminent)
                             .tint(.orange)
-                            .disabled(confidence < confidenceThreshold) // Disable if low confidence
+                            .disabled(confidence < confidenceThreshold)
                         }
                         .padding()
                         
-                        // Manual entry option
+                        // Manual entry option - now opens QuantityInputView directly
                         if confidence < confidenceThreshold {
                             Button("Type manually") {
-                                // You could present a text field here
-                                // For now, just dismiss and they can type
+                                // Dismiss camera and trigger manual entry
                                 dismiss()
+                                // Small delay to ensure camera sheet is dismissed
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    onManualEntry?(recognizedFood.isEmpty ? "Ingredient" : recognizedFood)
+                                }
                             }
                             .font(.caption)
                             .foregroundColor(.blue)
+                            .padding(.top, 8)
                         }
                     }
                     .padding()
@@ -171,6 +179,17 @@ struct FoodCameraView: View {
                                 .cornerRadius(20)
                             }
                         }
+                        
+                        // Quick manual entry option
+                        Button("Or type ingredient name") {
+                            dismiss()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                onManualEntry?("")
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .padding(.top, 8)
                     }
                     .padding()
                 }
