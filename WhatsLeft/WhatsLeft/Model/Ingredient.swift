@@ -66,30 +66,22 @@ struct Ingredient: Identifiable {
 }
 
 enum IngredientCategory: String, CaseIterable {
-    case produce = "Produce"      // Fruits, vegetables
-    case dairy = "Dairy"           // Milk, cheese, eggs
-    case meat = "Meat"             // Chicken, beef, pork
-    case seafood = "Seafood"       // Fish, shrimp
-    case pantry = "Pantry"         // Rice, pasta, canned goods
-    case spices = "Spices"         // Salt, pepper, herbs
-    case baking = "Baking"         // Flour, sugar, baking powder
-    case condiments = "Condiments" // Ketchup, mustard, sauces
-    case frozen = "Frozen"         // Frozen vegetables, ice cream
-    case beverages = "Beverages"   // Drinks, milk alternatives
-    case other = "Other"           // Miscellaneous
+    case dairy = "Dairy"
+    case meat = "Meat"
+    case grains = "Grains"
+    case vegetables = "Vegetables"
+    case fruits = "Fruits"
+    case spices = "Spices"
+    case other = "Other"
     
     var icon: String {
         switch self {
-        case .produce: return "leaf"
-        case .dairy: return "drop"
-        case .meat: return "hare"
-        case .seafood: return "fish"
-        case .pantry: return "cabinet"
+        case .dairy: return "mug"
+        case .meat: return "fork.knife"
+        case .grains: return "laurel.leading"
+        case .vegetables: return "carrot"
+        case .fruits: return "applelogo"
         case .spices: return "sparkles"
-        case .baking: return "oven"
-        case .condiments: return "bottle"
-        case .frozen: return "snowflake"
-        case .beverages: return "mug"
         case .other: return "questionmark"
         }
     }
@@ -100,14 +92,14 @@ extension Ingredient {
     static var sampleIngredients: [Ingredient] {
         [
             Ingredient(name: "Egg", quantity: 12, unit: "pieces", inStock: true, category: .dairy),
-            Ingredient(name: "Flour", quantity: 2.5, unit: "kg", inStock: true, category: .baking),
+            Ingredient(name: "Flour", quantity: 2.5, unit: "kg", inStock: true, category: .grains),
             Ingredient(name: "Milk", quantity: 1, unit: "liter", inStock: true, category: .dairy),
             Ingredient(name: "Salt", quantity: 500, unit: "grams", inStock: true, category: .spices),
             Ingredient(name: "Chicken Breast", quantity: 2, unit: "pieces", inStock: false, category: .meat),
-            Ingredient(name: "Rice", quantity: 3, unit: "kg", inStock: true, category: .pantry),
-            Ingredient(name: "Tomatoes", quantity: 6, unit: "pieces", inStock: true, category: .produce),
-            Ingredient(name: "Onions", quantity: 3, unit: "pieces", inStock: true, category: .produce),
-            Ingredient(name: "Garlic", quantity: 1, unit: "pieces", inStock: true, category: .produce),
+            Ingredient(name: "Rice", quantity: 3, unit: "kg", inStock: true, category: .grains),
+            Ingredient(name: "Tomatoes", quantity: 6, unit: "pieces", inStock: true, category: .vegetables),
+            Ingredient(name: "Onions", quantity: 3, unit: "pieces", inStock: true, category: .vegetables),
+            Ingredient(name: "Garlic", quantity: 1, unit: "pieces", inStock: true, category: .vegetables),
             Ingredient(name: "Butter", quantity: 250, unit: "grams", inStock: true, category: .dairy)
         ]
     }
