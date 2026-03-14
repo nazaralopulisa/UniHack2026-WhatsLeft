@@ -81,9 +81,9 @@ enum Difficulty: String, CaseIterable, Codable {
     
     var icon: String {
         switch self {
-        case .easy: return "face.smiling"
-        case .medium: return "face.neutral"
-        case .hard: return "face.dashed"
+        case .easy: return "flame"
+        case .medium: return "flame.fill"
+        case .hard: return "bolt.fill"
         }
     }
 }
