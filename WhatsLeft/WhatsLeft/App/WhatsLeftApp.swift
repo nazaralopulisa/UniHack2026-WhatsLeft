@@ -13,7 +13,7 @@ struct WhatsLeftApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            LandingView()
                 .environmentObject(kitchenVM)
         }
     }

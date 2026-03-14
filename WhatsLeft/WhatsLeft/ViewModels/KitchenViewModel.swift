@@ -134,8 +134,16 @@ class KitchenViewModel: ObservableObject {
             let localRecipes = getRecipesYouCanMake()
             suggestedRecipes = localRecipes + filteredAPIRecipes
         } catch {
-            recipeError = error
-            suggestedRecipes = getRecipesYouCanMake()
+            // Check if this is a cancellation error (Task cancelled or URLError.cancelled)
+            if Task.isCancelled || (error as? URLError)?.code == .cancelled {
+                // Ignore silently – this happens when you pull to refresh
+                print("Fetch cancelled – ignoring")
+            } else {
+                // Real error – show it
+                recipeError = error
+                // Fallback to local recipes
+                suggestedRecipes = getRecipesYouCanMake()
+            }
         }
         
         isLoadingRecipes = false
