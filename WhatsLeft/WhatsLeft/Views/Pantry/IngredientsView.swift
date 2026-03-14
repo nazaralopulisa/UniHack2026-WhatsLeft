@@ -55,7 +55,7 @@ struct IngredientsView: View {
         List {
             // Search Section
             Section {
-                SearchBar(text: $searchText)
+                SearchBar(text: $searchText, placeholder: "Search ingredients...")
                     .listRowInsets(EdgeInsets())
                     .listRowSeparator(.hidden)
             }
@@ -138,30 +138,6 @@ struct IngredientsView: View {
                 )
             }
         }
-    }
-}
-
-// MARK: - Helper Components
-struct SearchBar: View {
-    @Binding var text: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
-            TextField("Search ingredients...", text: $text)
-                .foregroundColor(.primary)
-            
-            if !text.isEmpty {
-                Button(action: { text = "" }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .padding()
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(10)
     }
 }
 
