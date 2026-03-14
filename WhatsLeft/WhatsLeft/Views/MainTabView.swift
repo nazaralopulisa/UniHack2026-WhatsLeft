@@ -50,7 +50,7 @@ struct MainTabView: View {
                 
                 // Cookbook Tab
                 NavigationStack {
-                    CookbookView()
+                    CookbookView(viewModel: kitchenVM)
                 }
                 .tabItem {
                     Label("Cookbook", systemImage: "book")
@@ -59,7 +59,7 @@ struct MainTabView: View {
                 
                 // Grocery Tab
                 NavigationStack {
-                    GroceryListView()
+                    GroceryListView(viewModel: kitchenVM)
                 }
                 .tabItem {
                     Label("Grocery", systemImage: "cart")

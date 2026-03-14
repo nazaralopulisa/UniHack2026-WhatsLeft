@@ -114,13 +114,7 @@ struct RecipeDetailView: View {
                     .buttonStyle(.borderedProminent)
                     .disabled(recipe.ingredients.isEmpty)
 
-                    Button(recipe.isSaved ? "Remove from cookbook" : "Save to cookbook") {
-                        if kitchenVM.savedRecipes.contains(where: { $0.id == recipe.id }) {
-                            kitchenVM.unsaveRecipe(recipe)
-                        } else {
-                            kitchenVM.saveRecipe(recipe)
-                        }
-                    }
+
                     .buttonStyle(.bordered)
                 }
                 .padding(.horizontal)

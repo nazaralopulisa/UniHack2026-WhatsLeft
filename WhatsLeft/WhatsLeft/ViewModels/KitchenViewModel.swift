@@ -9,35 +9,44 @@ import SwiftUI
 import Foundation
 import Combine
 
+// MARK: - GroceryItem Model
+struct GroceryItem: Identifiable, Hashable {
+    let id = UUID()
+    let name: String
+    let quantity: Double
+    let unit: String
+
+    var displayString: String {
+        if quantity == 0 {
+            return name
+        }
+        if quantity.truncatingRemainder(dividingBy: 1) == 0 {
+            return "\(Int(quantity)) \(unit) \(name)"
+        } else {
+            return String(format: "%.1f %@ %@", quantity, unit, name)
+        }
+    }
+}
+
 class KitchenViewModel: ObservableObject {
-    
+
     // MARK: - Published Properties
-    // These notify the view when they change
     @Published var ingredients: [Ingredient] = []
     @Published var savedRecipes: [Recipe] = []
-    @Published var groceryList: [String] = []
+    @Published var groceryList: [GroceryItem] = []
     @Published var searchText: String = ""
     @Published var suggestedRecipes: [Recipe] = []
     @Published var isLoadingRecipes = false
     @Published var recipeError: Error? = nil
-    
+
     private let recipeService = RecipeService()
     private var cancellables = Set<AnyCancellable>()
-    
-    // MARK: - Initializer
-    init() {
-        // Load saved data or use sample data
-        self.ingredients = Ingredient.sampleIngredients
-        self.savedRecipes = []
-        self.groceryList = []
-        Task { await fetchRecipeSuggestions() }
-    }
-    
+
     // MARK: - Computed Properties
     var availableIngredients: [String] {
         ingredients.filter { $0.inStock }.map { $0.name }
     }
-    
+
     var filteredIngredients: [Ingredient] {
         if searchText.isEmpty {
             return ingredients
@@ -45,15 +54,23 @@ class KitchenViewModel: ObservableObject {
             return ingredients.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
     }
-    
+
     var totalIngredientsCount: Int {
         ingredients.count
     }
-    
+
     var inStockCount: Int {
         ingredients.filter { $0.inStock }.count
     }
-    
+
+    // MARK: - Initializer
+    init() {
+        self.ingredients = Ingredient.sampleIngredients
+        self.savedRecipes = []
+        self.groceryList = []
+        Task { await fetchRecipeSuggestions() }
+    }
+
     // MARK: - Ingredient Methods
     func toggleIngredient(_ ingredient: Ingredient) {
         if let index = ingredients.firstIndex(where: { $0.id == ingredient.id }) {
@@ -61,29 +78,26 @@ class KitchenViewModel: ObservableObject {
         }
         Task { await fetchRecipeSuggestions() }
     }
-    
-    func addIngredient(_ ingredient: Ingredient) {  // Capital I in Ingredient
-        // Check if ingredient already exists (case insensitive)
+
+    func addIngredient(_ ingredient: Ingredient) {
         if let index = ingredients.firstIndex(where: {
             $0.name.lowercased() == ingredient.name.lowercased()
         }) {
-            // Update existing ingredient
             var existingIngredient = ingredients[index]
             existingIngredient.quantity += ingredient.quantity
             existingIngredient.inStock = true
             ingredients[index] = existingIngredient
         } else {
-            // Add new ingredient
             ingredients.append(ingredient)
         }
         Task { await fetchRecipeSuggestions() }
     }
-    
+
     func removeIngredient(at indexSet: IndexSet) {
         ingredients.remove(atOffsets: indexSet)
         Task { await fetchRecipeSuggestions() }
     }
-    
+
     func updateIngredientQuantity(id: UUID, quantity: Double, unit: String) {
         if let index = ingredients.firstIndex(where: { $0.id == id }) {
             ingredients[index].quantity = quantity
@@ -102,80 +116,114 @@ class KitchenViewModel: ObservableObject {
     func deleteIngredient(id: UUID) {
         ingredients.removeAll { $0.id == id }
     }
-    
+
     // MARK: - Recipe Methods
     func getRecipesYouCanMake() -> [Recipe] {
         return SampleData.recipes.filter { $0.canMake(with: availableIngredients) }
     }
-    
+
     func saveRecipe(_ recipe: Recipe) {
         if !savedRecipes.contains(where: { $0.id == recipe.id }) {
             savedRecipes.append(recipe)
         }
     }
-    
+
     func unsaveRecipe(_ recipe: Recipe) {
         savedRecipes.removeAll { $0.id == recipe.id }
     }
-    
+
     @MainActor
     func fetchRecipeSuggestions() async {
         guard !availableIngredients.isEmpty else {
             suggestedRecipes = []
             return
         }
-        
+
         isLoadingRecipes = true
         recipeError = nil
-        
+
         do {
             let apiRecipes = try await recipeService.fetchRecipes(byIngredients: availableIngredients)
             let filteredAPIRecipes = apiRecipes.filter { $0.canMake(with: availableIngredients) }
             let localRecipes = getRecipesYouCanMake()
             suggestedRecipes = localRecipes + filteredAPIRecipes
         } catch {
-            // Check if this is a cancellation error (Task cancelled or URLError.cancelled)
             if Task.isCancelled || (error as? URLError)?.code == .cancelled {
-                // Ignore silently – this happens when you pull to refresh
                 print("Fetch cancelled – ignoring")
             } else {
-                // Real error – show it
                 recipeError = error
-                // Fallback to local recipes
                 suggestedRecipes = getRecipesYouCanMake()
             }
         }
-        
+
         isLoadingRecipes = false
     }
-    
+
     // MARK: - Grocery List Methods
-    func addToGroceryList(item: String) {
-        if !groceryList.contains(item) {
+    func addToGroceryList(item: GroceryItem) {
+        // Merge with existing item if same name and unit
+        if let index = groceryList.firstIndex(where: {
+            $0.name.lowercased() == item.name.lowercased() && $0.unit == item.unit
+        }) {
+            let existing = groceryList[index]
+            let combined = GroceryItem(
+                name: existing.name,
+                quantity: existing.quantity + item.quantity,
+                unit: existing.unit
+            )
+            groceryList[index] = combined
+        } else {
             groceryList.append(item)
         }
     }
-    
+
     func addMissingIngredientsFromRecipe(_ recipe: Recipe) {
         let missing = recipe.ingredients.filter { recipeIngredient in
             !availableIngredients.contains { available in
                 available.lowercased() == recipeIngredient.name.lowercased()
             }
         }
-        
-        for item in missing {
-            addToGroceryList(item: item.name)
+        for ingredient in missing {
+            let groceryItem = GroceryItem(
+                name: ingredient.name,
+                quantity: ingredient.quantity,
+                unit: ingredient.unit
+            )
+            addToGroceryList(item: groceryItem)
         }
     }
-    
+
+    /// Removes the item from grocery list and adds it to the pantry.
+    func purchaseGroceryItem(_ item: GroceryItem) {
+        // Remove from grocery list
+        groceryList.removeAll { $0.id == item.id }
+
+        // Determine category: use existing ingredient's category if available
+        let category: IngredientCategory
+        if let existing = ingredients.first(where: { $0.name.lowercased() == item.name.lowercased() }) {
+            category = existing.category
+        } else {
+            category = .other
+        }
+
+        // Create new ingredient and add to pantry
+        let newIngredient = Ingredient(
+            name: item.name,
+            quantity: item.quantity,
+            unit: item.unit,
+            inStock: true,
+            category: category
+        )
+        addIngredient(newIngredient)
+    }
+
     func removeFromGroceryList(at indexSet: IndexSet) {
         groceryList.remove(atOffsets: indexSet)
     }
-    
+
     func clearGroceryList() {
         groceryList.removeAll()
     }
-    
 }
 
 // MARK: - Sample Data

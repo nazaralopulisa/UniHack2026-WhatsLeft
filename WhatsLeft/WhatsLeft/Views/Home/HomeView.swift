@@ -93,6 +93,7 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+    
 }
 
 // MARK: - Reusable Chip View (replaces your DifficultyChip)
