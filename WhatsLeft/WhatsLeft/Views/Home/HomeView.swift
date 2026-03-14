@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var kitchenVM: KitchenViewModel
+    @ObservedObject var viewModel: KitchenViewModel
     @State private var selectedDifficulty: Difficulty? = nil
     
     // Filter recipes based on selected difficulty
     var filteredRecipes: [Recipe] {
-        guard let selected = selectedDifficulty else {
-            return kitchenVM.suggestedRecipes
+            guard let selected = selectedDifficulty else {
+                return viewModel.suggestedRecipes // Use viewModel
+            }
+            return viewModel.suggestedRecipes.filter { $0.difficulty == selected }
         }
-        return kitchenVM.suggestedRecipes.filter { $0.difficulty == selected }
-    }
     
     var body: some View {
         NavigationView {
@@ -44,10 +44,10 @@ struct HomeView: View {
                 }
                 
                 // Main content area
-                if kitchenVM.isLoadingRecipes && kitchenVM.suggestedRecipes.isEmpty {
+                if viewModel.isLoadingRecipes && viewModel.suggestedRecipes.isEmpty {
                     ProgressView("Finding recipes...")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if let error = kitchenVM.recipeError {
+                } else if let error = viewModel.recipeError {
                     VStack {
                         Image(systemName: "exclamationmark.triangle")
                             .font(.largeTitle)
@@ -82,7 +82,7 @@ struct HomeView: View {
                         .padding()
                     }
                     .refreshable {
-                        await kitchenVM.fetchRecipeSuggestions()
+                        await viewModel.fetchRecipeSuggestions()
                     }
                 }
             }
