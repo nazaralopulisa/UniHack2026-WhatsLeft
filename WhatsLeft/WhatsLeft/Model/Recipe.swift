@@ -152,7 +152,7 @@ extension Recipe {
             cookTime: 5,
             servings: 2,
             ingredients: [
-                RecipeIngredient(name: "Eggs", quantity: 4, unit: "pieces", isOptional: false),
+                RecipeIngredient(name: "Egg", quantity: 4, unit: "pieces", isOptional: false),
                 RecipeIngredient(name: "Milk", quantity: 2, unit: "tbsp", isOptional: false),
                 RecipeIngredient(name: "Butter", quantity: 1, unit: "tbsp", isOptional: false),
                 RecipeIngredient(name: "Salt", quantity: 0.25, unit: "tsp", isOptional: false),
@@ -265,7 +265,7 @@ extension Recipe {
             ingredients: [
                 RecipeIngredient(name: "Flour", quantity: 1.5, unit: "cups", isOptional: false),
                 RecipeIngredient(name: "Milk", quantity: 1.25, unit: "cups", isOptional: false),
-                RecipeIngredient(name: "Eggs", quantity: 1, unit: "pieces", isOptional: false),
+                RecipeIngredient(name: "Egg", quantity: 1, unit: "pieces", isOptional: false),
                 RecipeIngredient(name: "Butter", quantity: 3, unit: "tbsp", isOptional: false),
                 RecipeIngredient(name: "Sugar", quantity: 2, unit: "tbsp", isOptional: false),
                 RecipeIngredient(name: "Baking Powder", quantity: 1, unit: "tbsp", isOptional: false),
@@ -301,7 +301,7 @@ extension Recipe {
             cookTime: 7,
             servings: 1,
             ingredients: [
-                RecipeIngredient(name: "Eggs", quantity: 3, unit: "pieces", isOptional: false),
+                RecipeIngredient(name: "Egg", quantity: 3, unit: "pieces", isOptional: false),
                 RecipeIngredient(name: "Milk", quantity: 1, unit: "tbsp", isOptional: false),
                 RecipeIngredient(name: "Onion", quantity: 0.25, unit: "pieces", isOptional: false),
                 RecipeIngredient(name: "Bell Pepper", quantity: 0.25, unit: "pieces", isOptional: true),

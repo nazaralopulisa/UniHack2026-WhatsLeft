@@ -105,15 +105,18 @@ class KitchenViewModel: ObservableObject {
     
     // MARK: - Recipe Methods
     func getRecipesYouCanMake() -> [Recipe] {
-        // This will be expanded later with actual recipe matching
-        return SampleData.recipes.filter { recipe in
-            let missingIngredients = recipe.ingredients.filter { recipeIngredient in
+        
+        let result = SampleData.recipes.filter { recipe in
+            let missing = recipe.ingredients.filter { recipeIngredient in
                 !availableIngredients.contains { available in
                     available.lowercased() == recipeIngredient.name.lowercased()
                 }
             }
-            return missingIngredients.count <= 1 // Allow 1 missing ingredient
+            
+            return missing.count <= 3
         }
+        
+        return result
     }
     
     func saveRecipe(_ recipe: Recipe) {
@@ -145,6 +148,8 @@ class KitchenViewModel: ObservableObject {
             
             // Combine both – you may want to avoid duplicates, but for now just append
             suggestedRecipes = localRecipes + apiRecipes
+            
+            
         } catch {
             recipeError = error
             // Fallback to local recipes only
