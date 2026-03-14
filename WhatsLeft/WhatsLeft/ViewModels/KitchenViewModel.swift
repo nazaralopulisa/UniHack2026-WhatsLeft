@@ -15,7 +15,9 @@ struct GroceryItem: Identifiable, Hashable {
     let name: String
     let quantity: Double
     let unit: String
-
+    let recipeId: UUID?
+    let recipeName: String?
+    
     var displayString: String {
         if quantity == 0 {
             return name
@@ -161,22 +163,26 @@ class KitchenViewModel: ObservableObject {
 
     // MARK: - Grocery List Methods
     func addToGroceryList(item: GroceryItem) {
-        // Merge with existing item if same name and unit
+        // Check if same item exists from the SAME recipe
         if let index = groceryList.firstIndex(where: {
-            $0.name.lowercased() == item.name.lowercased() && $0.unit == item.unit
+            $0.name.lowercased() == item.name.lowercased() &&
+            $0.unit == item.unit &&
+            $0.recipeId == item.recipeId  // Only combine if from same recipe
         }) {
             let existing = groceryList[index]
             let combined = GroceryItem(
                 name: existing.name,
                 quantity: existing.quantity + item.quantity,
-                unit: existing.unit
+                unit: existing.unit,
+                recipeId: existing.recipeId,
+                recipeName: existing.recipeName
             )
             groceryList[index] = combined
         } else {
             groceryList.append(item)
         }
     }
-
+    
     func addMissingIngredientsFromRecipe(_ recipe: Recipe) {
         let missing = recipe.ingredients.filter { recipeIngredient in
             !availableIngredients.contains { available in
@@ -187,7 +193,9 @@ class KitchenViewModel: ObservableObject {
             let groceryItem = GroceryItem(
                 name: ingredient.name,
                 quantity: ingredient.quantity,
-                unit: ingredient.unit
+                unit: ingredient.unit,
+                recipeId: recipe.id,
+                recipeName: recipe.name
             )
             addToGroceryList(item: groceryItem)
         }

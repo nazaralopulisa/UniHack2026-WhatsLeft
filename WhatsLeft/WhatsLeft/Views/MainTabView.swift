@@ -59,7 +59,7 @@ struct MainTabView: View {
                 
                 // Grocery Tab
                 NavigationStack {
-                    GroceryListView(viewModel: kitchenVM)
+                    GroceryListView(viewModel: kitchenVM, selectedTab: $selectedTab)  // Pass the binding
                 }
                 .tabItem {
                     Label("Grocery", systemImage: "cart")
