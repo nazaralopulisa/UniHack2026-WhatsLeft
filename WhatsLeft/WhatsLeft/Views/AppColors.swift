@@ -12,6 +12,7 @@ extension Color {
     static let appYellow = Color(hex: "FFE677")
     static let appRed = Color(hex: "EE4140")
     static let appGreen = Color(hex: "639362")
+    static let darkYellow = Color(hex: "FFB300")
 }
 
 // Keep your hex initializer

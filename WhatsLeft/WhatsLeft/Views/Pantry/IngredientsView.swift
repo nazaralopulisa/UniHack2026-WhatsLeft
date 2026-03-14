@@ -119,7 +119,7 @@ struct IngredientsView: View {
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.title3)
-                        .foregroundColor(.orange)
+                        .foregroundColor(.appGreen)
                 }
             }
         }

@@ -24,7 +24,7 @@ struct CategoryChip: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(isSelected ? Color.orange : Color.gray.opacity(0.1))
+            .background(isSelected ? Color.appGreen : Color.gray.opacity(0.1))
             .foregroundColor(isSelected ? .white : .primary)
             .cornerRadius(20)
         }

@@ -25,7 +25,7 @@ struct ModernIngredientRow: View {
         HStack(spacing: 12) {
             // Category icon
             Image(systemName: ingredient.category.icon)
-                .foregroundColor(.orange)
+                .foregroundColor(.appGreen)
                 .frame(width: 30)
             
             // Ingredient name and unit
@@ -55,7 +55,7 @@ struct ModernIngredientRow: View {
                     }
                 } label: {
                     Image(systemName: "minus.circle")
-                        .foregroundColor(.orange)
+                        .foregroundColor(.appGreen)
                         .font(.title3)
                 }
                 .buttonStyle(BorderlessButtonStyle())
@@ -76,7 +76,7 @@ struct ModernIngredientRow: View {
                     )
                 } label: {
                     Image(systemName: "plus.circle.fill")
-                        .foregroundColor(.orange)
+                        .foregroundColor(.appGreen)
                         .font(.title3)
                 }
                 .buttonStyle(BorderlessButtonStyle())
@@ -85,10 +85,10 @@ struct ModernIngredientRow: View {
             // Edit button (pencil)
             Button(action: onEdit) {
                 Image(systemName: "pencil")
-                    .foregroundColor(.blue)
+                    .foregroundColor(.darkYellow)
                     .font(.caption)
                     .padding(8)
-                    .background(Color.blue.opacity(0.1))
+                    .background(Color.darkYellow.opacity(0.1))
                     .clipShape(Circle())
             }
             .buttonStyle(BorderlessButtonStyle())
