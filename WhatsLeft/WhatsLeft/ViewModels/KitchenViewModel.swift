@@ -74,10 +74,22 @@ class KitchenViewModel: ObservableObject {
         ingredients.remove(atOffsets: indexSet)
     }
     
-    func updateIngredientQuantity(id: UUID, newQuantity: Double) {
+    func updateIngredientQuantity(id: UUID, quantity: Double, unit: String) {
         if let index = ingredients.firstIndex(where: { $0.id == id }) {
-            ingredients[index].quantity = newQuantity
+            ingredients[index].quantity = quantity
+            ingredients[index].unit = unit
         }
+    }
+
+    func updateIngredientDetails(id: UUID, name: String, category: IngredientCategory) {
+        if let index = ingredients.firstIndex(where: { $0.id == id }) {
+            ingredients[index].category = category
+            ingredients[index].name = name
+        }
+    }
+
+    func deleteIngredient(id: UUID) {
+        ingredients.removeAll { $0.id == id }
     }
     
     // MARK: - Recipe Methods
