@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		78301D062F64652F002A9C24 /* WhatsLeft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsLeft.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9074C272F65417800798236 /* WhatsLeft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsLeft.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		78301D082F64652F002A9C24 /* WhatsLeft */ = {
+		B9074C292F65417800798236 /* WhatsLeft */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = WhatsLeft;
 			sourceTree = "<group>";
@@ -19,7 +19,7 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		78301D032F64652F002A9C24 /* Frameworks */ = {
+		B9074C242F65417800798236 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -29,18 +29,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		78301CFD2F64652F002A9C24 = {
+		B9074C1E2F65417800798236 = {
 			isa = PBXGroup;
 			children = (
-				78301D082F64652F002A9C24 /* WhatsLeft */,
-				78301D072F64652F002A9C24 /* Products */,
+				B9074C292F65417800798236 /* WhatsLeft */,
+				B9074C282F65417800798236 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		78301D072F64652F002A9C24 /* Products */ = {
+		B9074C282F65417800798236 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				78301D062F64652F002A9C24 /* WhatsLeft.app */,
+				B9074C272F65417800798236 /* WhatsLeft.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,64 +48,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		78301D052F64652F002A9C24 /* WhatsLeft */ = {
+		B9074C262F65417800798236 /* WhatsLeft */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 78301D112F646530002A9C24 /* Build configuration list for PBXNativeTarget "WhatsLeft" */;
+			buildConfigurationList = B9074C322F65417A00798236 /* Build configuration list for PBXNativeTarget "WhatsLeft" */;
 			buildPhases = (
-				78301D022F64652F002A9C24 /* Sources */,
-				78301D032F64652F002A9C24 /* Frameworks */,
-				78301D042F64652F002A9C24 /* Resources */,
+				B9074C232F65417800798236 /* Sources */,
+				B9074C242F65417800798236 /* Frameworks */,
+				B9074C252F65417800798236 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				78301D082F64652F002A9C24 /* WhatsLeft */,
+				B9074C292F65417800798236 /* WhatsLeft */,
 			);
 			name = WhatsLeft;
 			packageProductDependencies = (
 			);
 			productName = WhatsLeft;
-			productReference = 78301D062F64652F002A9C24 /* WhatsLeft.app */;
+			productReference = B9074C272F65417800798236 /* WhatsLeft.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		78301CFE2F64652F002A9C24 /* Project object */ = {
+		B9074C1F2F65417800798236 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2620;
-				LastUpgradeCheck = 2620;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
-					78301D052F64652F002A9C24 = {
-						CreatedOnToolsVersion = 26.2;
+					B9074C262F65417800798236 = {
+						CreatedOnToolsVersion = 26.3;
 					};
 				};
 			};
-			buildConfigurationList = 78301D012F64652F002A9C24 /* Build configuration list for PBXProject "WhatsLeft" */;
+			buildConfigurationList = B9074C222F65417800798236 /* Build configuration list for PBXProject "WhatsLeft" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 78301CFD2F64652F002A9C24;
+			mainGroup = B9074C1E2F65417800798236;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 78301D072F64652F002A9C24 /* Products */;
+			productRefGroup = B9074C282F65417800798236 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				78301D052F64652F002A9C24 /* WhatsLeft */,
+				B9074C262F65417800798236 /* WhatsLeft */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		78301D042F64652F002A9C24 /* Resources */ = {
+		B9074C252F65417800798236 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +115,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		78301D022F64652F002A9C24 /* Sources */ = {
+		B9074C232F65417800798236 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -125,7 +125,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		78301D0F2F646530002A9C24 /* Debug */ = {
+		B9074C302F65417A00798236 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -188,7 +188,7 @@
 			};
 			name = Debug;
 		};
-		78301D102F646530002A9C24 /* Release */ = {
+		B9074C312F65417A00798236 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -244,7 +244,7 @@
 			};
 			name = Release;
 		};
-		78301D122F646530002A9C24 /* Debug */ = {
+		B9074C332F65417A00798236 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -275,7 +275,7 @@
 			};
 			name = Debug;
 		};
-		78301D132F646530002A9C24 /* Release */ = {
+		B9074C342F65417A00798236 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -309,25 +309,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		78301D012F64652F002A9C24 /* Build configuration list for PBXProject "WhatsLeft" */ = {
+		B9074C222F65417800798236 /* Build configuration list for PBXProject "WhatsLeft" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				78301D0F2F646530002A9C24 /* Debug */,
-				78301D102F646530002A9C24 /* Release */,
+				B9074C302F65417A00798236 /* Debug */,
+				B9074C312F65417A00798236 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		78301D112F646530002A9C24 /* Build configuration list for PBXNativeTarget "WhatsLeft" */ = {
+		B9074C322F65417A00798236 /* Build configuration list for PBXNativeTarget "WhatsLeft" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				78301D122F646530002A9C24 /* Debug */,
-				78301D132F646530002A9C24 /* Release */,
+				B9074C332F65417A00798236 /* Debug */,
+				B9074C342F65417A00798236 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 78301CFE2F64652F002A9C24 /* Project object */;
+	rootObject = B9074C1F2F65417800798236 /* Project object */;
 }
