@@ -202,7 +202,7 @@ struct GroceryListView: View {
                         // Checkbox
                         Button(action: { toggleConsolidatedItem(item) }) {
                             Image(systemName: checkedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(checkedItems.contains(item.id) ? .green : .appGreen)
+                                .foregroundColor(checkedItems.contains(item.id) ? .appGreen : .appGreen)
                                 .font(.title2)
                         }
                         .buttonStyle(PlainButtonStyle())

@@ -111,12 +111,14 @@ struct RecipeDetailView: View {
                         kitchenVM.addMissingIngredientsFromRecipe(recipe)
                         showingAddedAlert = true
                     }
-                    .buttonStyle(.borderedProminent)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.darkYellow)
+                    .cornerRadius(10)
                     .disabled(recipe.ingredients.isEmpty)
-
-
-                    .buttonStyle(.bordered)
                 }
+                .frame(maxWidth: .infinity)
                 .padding(.horizontal)
                 .padding(.top)
             }
