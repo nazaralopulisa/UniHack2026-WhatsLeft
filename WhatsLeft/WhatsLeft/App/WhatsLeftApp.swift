@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct WhatsLeftApp: App {
+    @StateObject private var kitchenVM = KitchenViewModel()
+    
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .environmentObject(kitchenVM)
         }
     }
 }

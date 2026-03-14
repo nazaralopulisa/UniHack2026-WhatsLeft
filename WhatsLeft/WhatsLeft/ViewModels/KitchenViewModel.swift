@@ -17,6 +17,12 @@ class KitchenViewModel: ObservableObject {
     @Published var savedRecipes: [Recipe] = []
     @Published var groceryList: [String] = []
     @Published var searchText: String = ""
+    @Published var suggestedRecipes: [Recipe] = []
+    @Published var isLoadingRecipes = false
+    @Published var recipeError: Error? = nil
+    
+    private let recipeService = RecipeService()
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initializer
     init() {
@@ -24,6 +30,7 @@ class KitchenViewModel: ObservableObject {
         self.ingredients = Ingredient.sampleIngredients
         self.savedRecipes = []
         self.groceryList = []
+        Task { await fetchRecipeSuggestions() }
     }
     
     // MARK: - Computed Properties
@@ -52,6 +59,7 @@ class KitchenViewModel: ObservableObject {
         if let index = ingredients.firstIndex(where: { $0.id == ingredient.id }) {
             ingredients[index].inStock.toggle()
         }
+        Task { await fetchRecipeSuggestions() }
     }
     
     func addIngredient(_ ingredient: Ingredient) {  // Capital I in Ingredient
@@ -68,10 +76,12 @@ class KitchenViewModel: ObservableObject {
             // Add new ingredient
             ingredients.append(ingredient)
         }
+        Task { await fetchRecipeSuggestions() }
     }
     
     func removeIngredient(at indexSet: IndexSet) {
         ingredients.remove(atOffsets: indexSet)
+        Task { await fetchRecipeSuggestions() }
     }
     
     func updateIngredientQuantity(id: UUID, quantity: Double, unit: String) {
@@ -79,6 +89,7 @@ class KitchenViewModel: ObservableObject {
             ingredients[index].quantity = quantity
             ingredients[index].unit = unit
         }
+        Task { await fetchRecipeSuggestions() }
     }
 
     func updateIngredientDetails(id: UUID, name: String, category: IngredientCategory) {
@@ -113,6 +124,34 @@ class KitchenViewModel: ObservableObject {
     
     func unsaveRecipe(_ recipe: Recipe) {
         savedRecipes.removeAll { $0.id == recipe.id }
+    }
+    
+    @MainActor
+    func fetchRecipeSuggestions() async {
+        guard !availableIngredients.isEmpty else {
+            suggestedRecipes = []
+            return
+        }
+        
+        isLoadingRecipes = true
+        recipeError = nil
+        
+        do {
+            // Fetch from API
+            let apiRecipes = try await recipeService.fetchRecipes(byIngredients: availableIngredients)
+            
+            // Get local recipes you can make (your existing method)
+            let localRecipes = getRecipesYouCanMake()
+            
+            // Combine both – you may want to avoid duplicates, but for now just append
+            suggestedRecipes = localRecipes + apiRecipes
+        } catch {
+            recipeError = error
+            // Fallback to local recipes only
+            suggestedRecipes = getRecipesYouCanMake()
+        }
+        
+        isLoadingRecipes = false
     }
     
     // MARK: - Grocery List Methods

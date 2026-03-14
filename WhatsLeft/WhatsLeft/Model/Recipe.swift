@@ -21,6 +21,7 @@ struct Recipe: Identifiable, Codable {
     let instructions: [String]
     let tips: [String]?
     let imageName: String? // For app bundle images
+    let imageURL: URL?
     var isSaved: Bool = false
     var dateAdded: Date = Date()
     
@@ -173,6 +174,7 @@ extension Recipe {
                 "Use low heat for the fluffiest results."
             ],
             imageName: "scrambled-eggs",
+            imageURL: nil,
             isSaved: false
         ),
         
@@ -210,6 +212,7 @@ extension Recipe {
                 "Fresh basil makes a big difference!"
             ],
             imageName: "tomato-pasta",
+            imageURL: nil,
             isSaved: false
         ),
         
@@ -248,6 +251,7 @@ extension Recipe {
                 "Use high heat for authentic stir fry texture."
             ],
             imageName: "stir-fry",
+            imageURL: nil,
             isSaved: false
         ),
         
@@ -285,6 +289,7 @@ extension Recipe {
                 "Keep cooked pancakes warm in a low oven while making the rest."
             ],
             imageName: "pancakes",
+            imageURL: nil,
             isSaved: false
         ),
         
@@ -321,6 +326,7 @@ extension Recipe {
                 "Customize with whatever vegetables you have on hand."
             ],
             imageName: "omelette",
+            imageURL: nil,
             isSaved: false
         )
     ]
