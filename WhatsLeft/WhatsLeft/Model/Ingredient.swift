@@ -2,7 +2,7 @@ import Foundation
 
 struct Ingredient: Identifiable {
     let id = UUID()
-    let name: String  // Just use this directly
+    var name: String 
     var quantity: Double
     var unit: String
     var inStock: Bool
