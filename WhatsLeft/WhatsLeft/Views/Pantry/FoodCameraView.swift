@@ -56,7 +56,7 @@ struct FoodCameraView: View {
                             .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(confidence > confidenceThreshold ? Color.green : Color.appYellow, lineWidth: 3)
+                                    .stroke(confidence > confidenceThreshold ? Color.black : Color.black, lineWidth: 3)
                             )
                         
                         Text("I found:")
@@ -74,7 +74,7 @@ struct FoodCameraView: View {
                                 Spacer()
                                 Text("\(Int(confidence * 100))%")
                                     .bold()
-                                    .foregroundColor(confidence > confidenceThreshold ? .green : .orange)
+                                    .foregroundColor(confidence > confidenceThreshold ? .appGreen : .appYellow)
                             }
                             
                             // Progress bar
@@ -87,7 +87,7 @@ struct FoodCameraView: View {
                                     
                                     Rectangle()
                                         .frame(width: min(CGFloat(confidence) * geometry.size.width, geometry.size.width), height: 8)
-                                        .foregroundColor(confidence > confidenceThreshold ? .green : .orange)
+                                        .foregroundColor(confidence > confidenceThreshold ? .appGreen : .orange)
                                 }
                                 .cornerRadius(4)
                             }
@@ -98,7 +98,7 @@ struct FoodCameraView: View {
                         if confidence < confidenceThreshold {
                             Text("I'm not very sure about this one. Want to try again?")
                                 .font(.caption)
-                                .foregroundColor(.orange)
+                                .foregroundColor(.appRed)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal)
                         }
@@ -117,7 +117,7 @@ struct FoodCameraView: View {
                                 dismiss()
                             }
                             .buttonStyle(.borderedProminent)
-                            .tint(.orange)
+                            .tint(.darkYellow)
                             .disabled(confidence < confidenceThreshold)
                         }
                         .padding()
