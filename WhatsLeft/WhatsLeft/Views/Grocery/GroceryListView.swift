@@ -14,6 +14,10 @@ struct GroceryListView: View {
 
     var body: some View {
         VStack {
+            Text("Grocery List")
+                .padding()
+                .font(.title)
+                .bold()
             if viewModel.groceryList.isEmpty {
                 ContentUnavailableView(
                     "List is Empty",
@@ -60,8 +64,6 @@ struct GroceryListView: View {
                 }
             }
         }
-        .navigationTitle("Grocery List")
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if !viewModel.groceryList.isEmpty {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -82,4 +84,8 @@ struct GroceryListView: View {
             }
         }
     }
+}
+
+#Preview {
+    GroceryListView(viewModel: KitchenViewModel())
 }
