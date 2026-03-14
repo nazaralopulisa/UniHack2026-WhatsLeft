@@ -104,7 +104,7 @@ struct GroceryListView: View {
                                 .foregroundColor(.white)
                                 .padding()
                                 .frame(maxWidth: 200)
-                                .background(Color.orange)
+                                .background(Color.darkYellow)
                                 .cornerRadius(10)
                         }
                         .padding(.top, 20)
@@ -146,7 +146,7 @@ struct GroceryListView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
-                            .foregroundColor(.orange)
+                            .foregroundColor(.appRed)
                     }
                 }
             }
@@ -202,7 +202,7 @@ struct GroceryListView: View {
                         // Checkbox
                         Button(action: { toggleConsolidatedItem(item) }) {
                             Image(systemName: checkedItems.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(checkedItems.contains(item.id) ? .green : .blue)
+                                .foregroundColor(checkedItems.contains(item.id) ? .green : .appGreen)
                                 .font(.title2)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -218,9 +218,10 @@ struct GroceryListView: View {
                         Text("\(String(format: "%.1f", item.totalQuantity)) \(item.unit)")
                             .font(.subheadline)
                             .fontWeight(.semibold)
+                            .foregroundStyle(.gray)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
-                            .background(Color.orange.opacity(0.2))
+                            .background(Color.appYellow.opacity(0.2))
                             .cornerRadius(8)
                     }
                     
@@ -233,7 +234,7 @@ struct GroceryListView: View {
                                         .font(.caption)
                                         .padding(.horizontal, 8)
                                         .padding(.vertical, 4)
-                                        .background(Color.blue.opacity(0.1))
+                                        .background(Color.appYellow.opacity(0.1))
                                         .cornerRadius(8)
                                 }
                             }
@@ -374,7 +375,7 @@ struct RecipeSectionHeader: View {
                 HStack {
                     Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
                         .font(.caption)
-                        .foregroundColor(.orange)
+                        .foregroundColor(.appRed)
                     
                     Text(recipeName)
                         .font(.headline)
@@ -390,7 +391,7 @@ struct RecipeSectionHeader: View {
             
             Button(action: onAddAll) {
                 Image(systemName: "cart.badge.plus")
-                    .foregroundColor(.orange)
+                    .foregroundColor(.appRed)
             }
         }
         .padding(.vertical, 4)
@@ -406,7 +407,7 @@ struct GroceryItemRow: View {
         HStack {
             Button(action: onCheck) {
                 Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isChecked ? .green : .blue)
+                    .foregroundColor(isChecked ? .green : .appGreen)
                     .font(.title2)
             }
             .buttonStyle(PlainButtonStyle())
