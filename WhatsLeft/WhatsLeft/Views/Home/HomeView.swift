@@ -76,7 +76,10 @@ struct HomeView: View {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                             ForEach(filteredRecipes) { recipe in
-                                RecipeCard(recipe: recipe)
+                                NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                                    RecipeCard(recipe: recipe)
+                                }
+                                .buttonStyle(PlainButtonStyle()) // Prevents the card from looking like a button
                             }
                         }
                         .padding()

@@ -43,11 +43,19 @@ struct Recipe: Identifiable, Codable {
     
     // For recipe matching
     func missingIngredients(from availableIngredients: [String]) -> [String] {
-        let needed = ingredients.map { $0.name.lowercased() }
-        let available = availableIngredients.map { $0.lowercased() }
+        // Only mandatory ingredients matter for availability
+        let mandatoryIngredients = ingredients.filter { !$0.isOptional }
         
-        return needed.filter { ingredient in
-            !available.contains { $0.contains(ingredient) || ingredient.contains($0) }
+        // Prepare word sets for available ingredients
+        let availableWordSets = availableIngredients.map {
+            Set($0.lowercased().split(separator: " ").map(String.init))
+        }
+        
+        return mandatoryIngredients.compactMap { needed -> String? in
+            let neededWords = Set(needed.name.lowercased().split(separator: " ").map(String.init))
+            // Check if any available ingredient contains all words of the needed ingredient
+            let isPresent = availableWordSets.contains { $0.isSuperset(of: neededWords) }
+            return isPresent ? nil : needed.name
         }
     }
     
