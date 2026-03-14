@@ -56,7 +56,7 @@ struct FoodCameraView: View {
                             .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(confidence > confidenceThreshold ? Color.green : Color.orange, lineWidth: 3)
+                                    .stroke(confidence > confidenceThreshold ? Color.green : Color.appYellow, lineWidth: 3)
                             )
                         
                         Text("I found:")
@@ -65,7 +65,7 @@ struct FoodCameraView: View {
                         Text(recognizedFood)
                             .font(.largeTitle)
                             .bold()
-                            .foregroundColor(.orange)
+                            .foregroundColor(.appRed)
                         
                         // Confidence meter
                         VStack(spacing: 5) {
@@ -143,7 +143,7 @@ struct FoodCameraView: View {
                     VStack(spacing: 30) {
                         Image(systemName: "camera.viewfinder")
                             .font(.system(size: 80))
-                            .foregroundColor(.orange)
+                            .foregroundColor(.appYellow)
                         
                         Text("Take a photo of your ingredient")
                             .font(.headline)
@@ -159,10 +159,13 @@ struct FoodCameraView: View {
                                 VStack {
                                     Image(systemName: "camera")
                                         .font(.largeTitle)
+                                        .foregroundColor(.appYellow)
+
                                     Text("Take Photo")
+                                        .foregroundColor(.appYellow)
                                 }
                                 .frame(width: 120, height: 120)
-                                .background(Color.orange.opacity(0.2))
+                                .background(Color.cream.opacity(0.2))
                                 .cornerRadius(20)
                             }
                             
@@ -172,10 +175,12 @@ struct FoodCameraView: View {
                                 VStack {
                                     Image(systemName: "photo")
                                         .font(.largeTitle)
+                                        .foregroundColor(.appYellow)
                                     Text("Choose Photo")
+                                        .foregroundColor(.appYellow)
                                 }
                                 .frame(width: 120, height: 120)
-                                .background(Color.blue.opacity(0.2))
+                                .background(Color.cream.opacity(0.2))
                                 .cornerRadius(20)
                             }
                         }
@@ -194,6 +199,7 @@ struct FoodCameraView: View {
                     .padding()
                 }
             }
+        
             .navigationTitle("Scan Food")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -19,6 +19,8 @@ struct MainTabView: View {
     @State private var selectedUnit = "pieces"
     @State private var selectedCategory: IngredientCategory = .other
     
+    
+    
     let units = ["pieces", "grams", "kg", "cups", "tbsp", "tsp", "ml", "liters"]
     
     var body: some View {
@@ -66,23 +68,29 @@ struct MainTabView: View {
                 }
                 .tag(4)
             }
-            .tint(.orange)
+            .tint(.appGreen)
             
             // Center Scan Button (floating above tab bar)
             Button {
                 showingScanner = true
             } label: {
                 ZStack {
-                    Circle()
-                        .fill(Color.orange)
-                        .frame(width: 60, height: 60)
-                        .shadow(radius: 4)
+                    // Tomato image
+                    Image("tomatosymbol")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 75, height: 75)
+                        .shadow(radius: 2)
                     
+                    // Camera symbol overlay
                     Image(systemName: "camera.viewfinder")
                         .font(.title2)
-                        .foregroundColor(.white)
+                        .foregroundColor(.appYellow)
+                        .offset(y: 4)
                 }
             }
+            .offset(y: 8)
+
         }
         .ignoresSafeArea(.keyboard)
         // Camera Scanner Sheet

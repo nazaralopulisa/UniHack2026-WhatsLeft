@@ -29,11 +29,12 @@ struct HomeView: View {
                         Chip(title: "All", isSelected: selectedDifficulty == nil) {
                             selectedDifficulty = nil
                         }
-                        
+
+                        // Difficulty chips
                         ForEach(Difficulty.allCases, id: \.self) { difficulty in
                             Chip(
                                 title: difficulty.rawValue,
-                                color: difficulty.color,
+                                color: difficulty.color, // this is the existing difficulty color (green/orange/red)
                                 isSelected: selectedDifficulty == difficulty
                             ) {
                                 selectedDifficulty = difficulty
@@ -99,17 +100,17 @@ struct HomeView: View {
 // MARK: - Reusable Chip View (replaces your DifficultyChip)
 struct Chip: View {
     let title: String
-    var color: Color = .blue
+    var color: Color = .appYellow  // default to yellow
     let isSelected: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .background(isSelected ? color : color.opacity(0.2))
-                .foregroundColor(isSelected ? .white : color)
+                .foregroundColor(isSelected ? .black : color)
                 .cornerRadius(20)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
