@@ -7,43 +7,75 @@
 
 import SwiftUI
 
+enum DifficultyTab: String, CaseIterable {
+    case all = "All"
+    case easy = "Easy"
+    case medium = "Medium"
+    case hard = "Hard"
+}
+
 struct HomeView: View {
     @ObservedObject var viewModel: KitchenViewModel
-    @State private var selectedDifficulty: Difficulty? = nil
-    
-    // Filter recipes based on selected difficulty
+    @State private var selectedTab: DifficultyTab = .all
+
+    // Counts for each difficulty
+    private var easyCount: Int {
+        viewModel.suggestedRecipes.filter { $0.difficulty == .easy }.count
+    }
+    private var mediumCount: Int {
+        viewModel.suggestedRecipes.filter { $0.difficulty == .medium }.count
+    }
+    private var hardCount: Int {
+        viewModel.suggestedRecipes.filter { $0.difficulty == .hard }.count
+    }
+
+    // Filtered recipes based on selected tab
     var filteredRecipes: [Recipe] {
-            guard let selected = selectedDifficulty else {
-                return viewModel.suggestedRecipes // Use viewModel
-            }
-            return viewModel.suggestedRecipes.filter { $0.difficulty == selected }
+        switch selectedTab {
+        case .all:
+            return viewModel.suggestedRecipes
+        case .easy:
+            return viewModel.suggestedRecipes.filter { $0.difficulty == .easy }
+        case .medium:
+            return viewModel.suggestedRecipes.filter { $0.difficulty == .medium }
+        case .hard:
+            return viewModel.suggestedRecipes.filter { $0.difficulty == .hard }
         }
-    
+    }
+
     var body: some View {
         NavigationView {
-            VStack {
-                // Difficulty filter chips
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        // "All" chip
-                        Chip(title: "All", isSelected: selectedDifficulty == nil) {
-                            selectedDifficulty = nil
-                        }
-
-                        // Difficulty chips
-                        ForEach(Difficulty.allCases, id: \.self) { difficulty in
-                            Chip(
-                                title: difficulty.rawValue,
-                                color: difficulty.color, // this is the existing difficulty color (green/orange/red)
-                                isSelected: selectedDifficulty == difficulty
-                            ) {
-                                selectedDifficulty = difficulty
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
+            VStack(spacing: 0) {
+                // Difficulty tabs
+                HStack(spacing: 0) {
+                    TabButton(
+                        title: DifficultyTab.all.rawValue,
+                        count: viewModel.suggestedRecipes.count,
+                        isSelected: selectedTab == .all,
+                        action: { selectedTab = .all }
+                    )
+                    TabButton(
+                        title: DifficultyTab.easy.rawValue,
+                        count: easyCount,
+                        isSelected: selectedTab == .easy,
+                        action: { selectedTab = .easy }
+                    )
+                    TabButton(
+                        title: DifficultyTab.medium.rawValue,
+                        count: mediumCount,
+                        isSelected: selectedTab == .medium,
+                        action: { selectedTab = .medium }
+                    )
+                    TabButton(
+                        title: DifficultyTab.hard.rawValue,
+                        count: hardCount,
+                        isSelected: selectedTab == .hard,
+                        action: { selectedTab = .hard }
+                    )
                 }
-                
+                .padding(.horizontal)
+                .padding(.top, 8)
+
                 // Main content area
                 if viewModel.isLoadingRecipes && viewModel.suggestedRecipes.isEmpty {
                     ProgressView("Finding recipes...")
@@ -77,10 +109,10 @@ struct HomeView: View {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                             ForEach(filteredRecipes) { recipe in
-                                NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                                NavigationLink(destination: RecipeDetailView(recipe: recipe).environmentObject(viewModel)) {
                                     RecipeCard(recipe: recipe)
                                 }
-                                .buttonStyle(PlainButtonStyle()) // Prevents the card from looking like a button
+                                .buttonStyle(PlainButtonStyle())
                             }
                         }
                         .padding()
@@ -92,85 +124,88 @@ struct HomeView: View {
             }
             .navigationTitle("WhatsLeft")
             .navigationBarTitleDisplayMode(.inline)
+            
         }
     }
-    
 }
 
-// MARK: - Reusable Chip View (replaces your DifficultyChip)
-struct Chip: View {
+// MARK: - Tab Button
+struct RecipieTabButton: View {
     let title: String
-    var color: Color = .appYellow  // default to yellow
+    let count: Int
     let isSelected: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isSelected ? color : color.opacity(0.2))
-                .foregroundColor(isSelected ? .black : color)
-                .cornerRadius(20)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(color, lineWidth: 1)
-                )
+            VStack(spacing: 8) {
+                HStack(spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .fontWeight(isSelected ? .semibold : .regular)
+                    Text("(\(count))")
+                        .font(.subheadline)
+                        .foregroundColor(isSelected ? .appRed : .gray)
+                }
+                Rectangle()
+                    .fill(isSelected ? Color.appRed : Color.clear)
+                    .frame(height: 2)
+            }
+            .foregroundColor(isSelected ? .appRed : .gray)
         }
+        .buttonStyle(PlainButtonStyle())
+        .frame(maxWidth: .infinity)
     }
 }
 
-// MARK: - Recipe Card
+// MARK: - Recipe Card 
 struct RecipeCard: View {
     let recipe: Recipe
-    
+
     var body: some View {
-        VStack(alignment: .leading) {
-            // Image (remote or local)
-            if let imageURL = recipe.imageURL {
-                AsyncImage(url: imageURL) { phase in
-                    switch phase {
-                    case .empty:
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.3))
-                            .aspectRatio(1, contentMode: .fit)
-                            .overlay(ProgressView())
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 150, height: 150)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                    case .failure:
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.3))
-                            .aspectRatio(1, contentMode: .fit)
-                            .overlay(Image(systemName: "photo"))
-                    @unknown default:
-                        EmptyView()
+        VStack(alignment: .leading, spacing: 6) {
+            Group {
+                if let imageURL = recipe.imageURL {
+                    AsyncImage(url: imageURL) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                                .frame(width: 150, height: 150)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 150, height: 150)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        case .failure:
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.gray.opacity(0.3))
+                                .frame(width: 150, height: 150)
+                                .overlay(Image(systemName: "photo"))
+                        @unknown default:
+                            EmptyView()
+                        }
                     }
+                } else if let imageName = recipe.imageName {
+                    Image(imageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 150, height: 150)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                } else {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(width: 150, height: 150)
+                        .overlay(Image(systemName: "photo"))
                 }
-                .frame(width: 150, height: 150)
-            } else if let imageName = recipe.imageName {
-                // Local asset
-                Image(imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 150, height: 150)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            } else {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 150, height: 150)
-                    .overlay(Image(systemName: "photo"))
             }
-            
-            // Recipe name
+
             Text(recipe.name)
                 .font(.headline)
-                .lineLimit(1)
-            
-            // Difficulty & time
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+
             HStack {
                 Label(recipe.difficulty.rawValue, systemImage: recipe.difficulty.icon)
                     .font(.caption)
@@ -183,5 +218,6 @@ struct RecipeCard: View {
             .foregroundColor(.secondary)
         }
         .frame(width: 150)
+        .frame(maxHeight: .infinity, alignment: .top)
     }
 }

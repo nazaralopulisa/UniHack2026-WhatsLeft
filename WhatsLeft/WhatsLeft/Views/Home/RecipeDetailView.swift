@@ -78,7 +78,7 @@ struct RecipeDetailView: View {
                             ingredient.name.lowercased().contains(available.lowercased())
                         }) {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
+                                .foregroundColor(.appGreen)
                         } else {
                             Image(systemName: "circle")
                                 .foregroundColor(.gray)

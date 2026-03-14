@@ -127,7 +127,7 @@ struct CookbookView: View {
                         }
                     } label: {
                         Image(systemName: showingSearch ? "xmark.circle.fill" : "magnifyingglass")
-                            .foregroundColor(.orange)
+                            .foregroundColor(.appRed)
                     }
                 }
             }
@@ -190,15 +190,15 @@ struct TabButton: View {
                     
                     Text("(\(count))")
                         .font(.subheadline)
-                        .foregroundColor(isSelected ? .orange : .gray)
+                        .foregroundColor(isSelected ? .appRed : .gray)
                 }
                 
                 // Indicator bar
                 Rectangle()
-                    .fill(isSelected ? Color.orange : Color.clear)
+                    .fill(isSelected ? Color.appRed : Color.clear)
                     .frame(height: 2)
             }
-            .foregroundColor(isSelected ? .orange : .gray)
+            .foregroundColor(isSelected ? .appRed : .gray)
         }
         .buttonStyle(PlainButtonStyle())
         .frame(maxWidth: .infinity)
@@ -209,18 +209,19 @@ struct TabButton: View {
 struct CookbookRecipeCard: View {
     let recipe: Recipe
     @ObservedObject var viewModel: KitchenViewModel
-    
+
     private var isSaved: Bool {
         viewModel.savedRecipes.contains(where: { $0.id == recipe.id })
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
+            // Image with heart
             ZStack(alignment: .topTrailing) {
                 RecipeImageView(recipe: recipe)
                     .frame(width: 150, height: 150)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                
+
                 Button(action: {
                     if isSaved {
                         viewModel.unsaveRecipe(recipe)
@@ -236,11 +237,15 @@ struct CookbookRecipeCard: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             }
-            
+
+            // Recipe name – wraps if needed
             Text(recipe.name)
                 .font(.headline)
-                .lineLimit(1)
-            
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+
+            // Difficulty & time
             HStack {
                 Label(recipe.difficulty.rawValue, systemImage: recipe.difficulty.icon)
                     .font(.caption)
@@ -252,7 +257,8 @@ struct CookbookRecipeCard: View {
             }
             .foregroundColor(.secondary)
         }
-        .frame(width: 150)
+        .frame(width: 150) // Fixed width
+        .frame(maxHeight: .infinity, alignment: .top) // Expand & align top
     }
 }
 
