@@ -26,7 +26,7 @@ struct MainTabView: View {
             TabView(selection: $selectedTab) {
                 // Recipes Tab
                 NavigationStack {
-                    HomeView()
+                    HomeView(viewModel: kitchenVM)
                 }
                 .tabItem {
                     Label("Recipes", systemImage: "fork.knife")
