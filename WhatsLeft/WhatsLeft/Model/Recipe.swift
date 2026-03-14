@@ -61,7 +61,7 @@ struct Recipe: Identifiable, Codable {
     
     func canMake(with availableIngredients: [String]) -> Bool {
         let missing = missingIngredients(from: availableIngredients)
-        return missing.count <= 1 // Allow 1 missing ingredient
+        return missing.count == 0 // Allow 0 missing mandatory ingredient
     }
 }
 
