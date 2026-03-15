@@ -132,7 +132,7 @@ struct LandingView: View {
             }
             
             // Phase 4: Reveal the title tomato with a pop
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
                     showTitleTomato = true
                     splatEffect = true
@@ -140,10 +140,10 @@ struct LandingView: View {
                 }
                 
                 // Phase 5: Bounce the title tomato
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    withAnimation(.spring(response: 0.2, dampingFraction: 0.3)) {
-                        splatEffect = false
-                    }
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                    withAnimation(.spring(response: 0.2, dampingFraction: 0.3)) {
+//                        splatEffect = false
+//                    }
                 }
                 
                 // Phase 6: Fade in tagline and button
@@ -157,7 +157,7 @@ struct LandingView: View {
             }
         }
     }
-}
+//}
 
 #Preview {
     LandingView()
