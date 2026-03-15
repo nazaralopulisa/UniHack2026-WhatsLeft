@@ -13,8 +13,10 @@ struct CookbookView: View {
     @State private var searchText = ""
     @State private var selectedTab: CookbookTab = .favorites
     
-    // All sample recipes
-    private let allRecipes = Recipe.sampleRecipes
+    // All recipes from ViewModel (includes both local and API)
+    private var allRecipes: [Recipe] {
+        return viewModel.totalRecipes
+    }
     
     // Filtered recipes based on search
     private var filteredRecipes: [Recipe] {
@@ -25,19 +27,13 @@ struct CookbookView: View {
         }
     }
     
-    // Saved recipes
+    // Saved recipes (from viewModel.savedRecipes)
     private var savedRecipes: [Recipe] {
-        filteredRecipes.filter { recipe in
-            viewModel.savedRecipes.contains(where: { $0.id == recipe.id })
+        if searchText.isEmpty {
+            return viewModel.savedRecipes
+        } else {
+            return viewModel.savedRecipes.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
-    }
-    
-    // Unsaved recipes (sorted alphabetically)
-    private var unsavedRecipes: [Recipe] {
-        filteredRecipes.filter { recipe in
-            !viewModel.savedRecipes.contains(where: { $0.id == recipe.id })
-        }
-        .sorted { $0.name < $1.name }
     }
     
     // Current recipes to display based on selected tab
@@ -46,14 +42,14 @@ struct CookbookView: View {
         case .favorites:
             return savedRecipes
         case .all:
-            return unsavedRecipes
+            return filteredRecipes
         }
     }
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Search Bar (when active) - USING REUSABLE SEARCHBAR
+                // Search Bar (when active)
                 if showingSearch {
                     SearchBar(text: $searchText, placeholder: "Search recipes...")
                         .padding(.horizontal)
@@ -65,14 +61,14 @@ struct CookbookView: View {
                 HStack(spacing: 0) {
                     TabButton(
                         title: "Favorites",
-                        count: savedRecipes.count,
+                        count: viewModel.savedRecipes.count,
                         isSelected: selectedTab == .favorites,
                         action: { selectedTab = .favorites }
                     )
                     
                     TabButton(
                         title: "All Recipes",
-                        count: unsavedRecipes.count,
+                        count: allRecipes.count,
                         isSelected: selectedTab == .all,
                         action: { selectedTab = .all }
                     )
@@ -82,7 +78,10 @@ struct CookbookView: View {
                 
                 // Recipe Grid
                 ScrollView {
-                    if currentRecipes.isEmpty {
+                    if viewModel.isLoadingRecipes && allRecipes.isEmpty {
+                        ProgressView("Loading recipes...")
+                            .frame(maxWidth: .infinity, minHeight: 200)
+                    } else if currentRecipes.isEmpty {
                         // Empty state based on tab
                         VStack(spacing: 20) {
                             Image(systemName: emptyStateIcon)
@@ -112,6 +111,9 @@ struct CookbookView: View {
                         .padding()
                     }
                 }
+                .refreshable {
+                    await viewModel.fetchRecipeSuggestions()
+                }
             }
             .navigationTitle("Cookbook")
             .navigationBarTitleDisplayMode(.inline)
@@ -132,6 +134,14 @@ struct CookbookView: View {
                 }
             }
         }
+        .onAppear {
+            // Load recipes if needed
+            if allRecipes.isEmpty {
+                Task {
+                    await viewModel.fetchRecipeSuggestions()
+                }
+            }
+        }
     }
     
     // Empty state helpers
@@ -140,7 +150,7 @@ struct CookbookView: View {
         case .favorites:
             return "heart.slash"
         case .all:
-            return "book.closed"
+            return searchText.isEmpty ? "book.closed" : "magnifyingglass"
         }
     }
     
@@ -159,7 +169,7 @@ struct CookbookView: View {
             return "Tap the heart icon on recipes you love to add them here"
         case .all:
             if searchText.isEmpty {
-                return "Check back later for more recipes"
+                return "Add ingredients to your pantry to see matching recipes"
             } else {
                 return "Try searching with a different keyword"
             }
@@ -238,7 +248,7 @@ struct CookbookRecipeCard: View {
                 .buttonStyle(PlainButtonStyle())
             }
 
-            // Recipe name – wraps if needed
+            // Recipe name
             Text(recipe.name)
                 .font(.headline)
                 .lineLimit(2)
@@ -257,8 +267,8 @@ struct CookbookRecipeCard: View {
             }
             .foregroundColor(.secondary)
         }
-        .frame(width: 150) // Fixed width
-        .frame(maxHeight: .infinity, alignment: .top) // Expand & align top
+        .frame(width: 150)
+        .frame(maxHeight: .infinity, alignment: .top)
     }
 }
 

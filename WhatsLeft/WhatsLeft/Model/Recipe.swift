@@ -59,9 +59,27 @@ struct Recipe: Identifiable, Codable {
         }
     }
     
+    // In Recipe.swift
     func canMake(with availableIngredients: [String]) -> Bool {
-        let missing = missingIngredients(from: availableIngredients)
-        return missing.count == 0 // Allow 0 missing mandatory ingredient
+        // Get all required ingredient names (non-optional)
+        let requiredIngredients = ingredients
+            .filter { !$0.isOptional }
+            .map { $0.name.lowercased() }
+        
+        let available = availableIngredients.map { $0.lowercased() }
+        
+        // Check if we have ALL required ingredients
+        for required in requiredIngredients {
+            let hasIngredient = available.contains { available in
+                available.contains(required) || required.contains(available)
+            }
+            
+            if !hasIngredient {
+                return false
+            }
+        }
+        
+        return true
     }
 }
 

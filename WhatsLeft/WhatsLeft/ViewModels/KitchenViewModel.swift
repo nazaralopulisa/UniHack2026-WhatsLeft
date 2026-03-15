@@ -35,6 +35,7 @@ class KitchenViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var ingredients: [Ingredient] = []
     @Published var savedRecipes: [Recipe] = []
+    @Published var totalRecipes: [Recipe] = []
     @Published var groceryList: [GroceryItem] = []
     @Published var searchText: String = ""
     @Published var suggestedRecipes: [Recipe] = []
@@ -69,6 +70,7 @@ class KitchenViewModel: ObservableObject {
     init() {
         self.ingredients = Ingredient.sampleIngredients
         self.savedRecipes = []
+        self.totalRecipes = Recipe.sampleRecipes
         self.groceryList = []
         Task { await fetchRecipeSuggestions() }
     }
@@ -136,28 +138,37 @@ class KitchenViewModel: ObservableObject {
 
     @MainActor
     func fetchRecipeSuggestions() async {
-        guard !availableIngredients.isEmpty else {
-            suggestedRecipes = []
-            return
-        }
-
         isLoadingRecipes = true
         recipeError = nil
-
+        
         do {
-            let apiRecipes = try await recipeService.fetchRecipes(byIngredients: availableIngredients)
-            let filteredAPIRecipes = apiRecipes.filter { $0.canMake(with: availableIngredients) }
+            // Get local recipes you can make
             let localRecipes = getRecipesYouCanMake()
-            suggestedRecipes = localRecipes + filteredAPIRecipes
-        } catch {
-            if Task.isCancelled || (error as? URLError)?.code == .cancelled {
-                print("Fetch cancelled – ignoring")
-            } else {
-                recipeError = error
-                suggestedRecipes = getRecipesYouCanMake()
+            
+            // Fetch random recipes from API
+            let apiRecipes = try await recipeService.fetchRandomRecipes(count: 20)
+            for recipe in apiRecipes{
+                totalRecipes.append(recipe)
             }
+            
+            // FILTER API RECIPES - only show ones you can make!
+            let filteredApiRecipes = apiRecipes.filter { recipe in
+                recipe.canMake(with: availableIngredients)
+            }
+            
+            // Combine them (API recipes first for variety)
+            suggestedRecipes = filteredApiRecipes + localRecipes
+            
+            print("✅ API: \(filteredApiRecipes.count)/\(apiRecipes.count) recipes you can make")
+            print("✅ Local: \(localRecipes.count) recipes")
+            print("✅ Total: \(suggestedRecipes.count) recipes")
+            
+        } catch {
+            print("❌ Failed to fetch API recipes: \(error)")
+            recipeError = error
+            suggestedRecipes = getRecipesYouCanMake()
         }
-
+        
         isLoadingRecipes = false
     }
 
